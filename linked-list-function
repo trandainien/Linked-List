@@ -1,0 +1,121 @@
+// Linked-List.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+#include <iostream>
+using namespace std;
+struct Node {
+    int data;
+    Node* pNext;
+};
+
+
+void createList(Node*& head) {
+    int x;
+    Node* cur = head;
+    while (cin >> x && x != 0) {
+        if (!head) {
+            head = new Node{x, nullptr};
+            cur = head;
+        }
+        else {
+            cur->pNext = new Node{ x, nullptr };
+            cur = cur->pNext;
+        }
+    }
+}
+
+void printList(Node* head) {
+    cout << "Your List:" << endl;
+    Node* cur = head;
+    while (cur) {
+        cout << cur->data << ' ';
+        cur = cur->pNext;
+    }cout << endl;
+}
+
+void deleteList(Node*& head) {
+    Node* cur = head;
+    while (head) {
+        head = head->pNext;
+        delete cur;
+        cur = head;
+    }
+}
+
+void addTailNode(Node*& head, int val) {
+    Node* newNode = new Node{ val,nullptr};
+
+    if (!head) {
+        head = newNode;
+        return;
+    }
+
+    Node* lastNode = head;
+    while (lastNode->pNext) {
+        lastNode = lastNode->pNext;
+    }
+
+    lastNode->pNext = newNode;
+}
+
+void addHeadNode(Node*& head, int val) {
+    //if head is empty else attach the new node at the end of the tail
+    if (!head) {
+        head = new Node{ val, nullptr };
+    }
+    else {
+        Node* newNode = new Node{ val,head};
+        head = newNode;
+    }
+}
+
+void addNodeAtKposition(Node*& head, int val) {
+    int cur_pos = 0;
+    int k;
+    cout << "Input k:"; cin >> k;
+    Node* cur = head;
+    while (cur && cur_pos != k - 1) {
+        cur = cur->pNext;
+        cur_pos++;
+    }
+ 
+    //if cur_pos is at the end of the list 
+    
+    if (cur_pos == k-1) {
+        if (k == 1) {
+           
+            addHeadNode(head, val);
+        }
+        else if (!cur->pNext) {
+        
+            addTailNode(head, val);
+        }
+        else {
+          
+            Node* prevNode = head;
+            Node* newNode = new Node{ val, cur};
+            int pos = 0;
+            while (pos < k - 2) {
+                prevNode = prevNode->pNext;
+                pos++;
+            }
+            prevNode->pNext = newNode;
+        }
+    }
+}
+
+int main()
+{
+    Node* head = nullptr;
+    createList(head);
+    //printList(head);
+    addTailNode(head, 10);
+    //printList(head);
+    addHeadNode(head, 15);
+
+    printList(head);
+    addNodeAtKposition(head, 1234);
+    printList(head);
+    deleteList(head);
+}
+
